@@ -13,43 +13,42 @@ function expressionCalculator(expr) {
     let opStack = [];
     let postfixList = [];
     let regex = /\s/gi ;
-    let tokenList = expr.replace(regex,"").split("");
-   // console.log(tokenList);
+    let elementList = expr.replace(regex,"").split("");
     let numbers = "0123456789";
     let num="";
     let ArNumbers = numbers.split("");
     let balance = 0;
-    tokenList.forEach(element => {
+    elementList.forEach(element => {
         if(element == ")"){
             balance -= 1; 
         } else if(element == "("){
             balance += 1;
         } 
     });
-    if(balance != 0){ console.log(balance,"asdasd");
+    if(balance != 0){ 
         throw "ExpressionError: Brackets must be paired";
     }
     
  
 
-    tokenList.forEach(token => {
-         if(ArNumbers.indexOf(token) != -1){ 
-            num += token; 
-         } else if(token == '('){
-            opStack.push(token);
+    elementList.forEach(element => {
+         if(ArNumbers.indexOf(element) != -1){ 
+            num += element; 
+         } else if(element == '('){
+            opStack.push(element);
             if(num != "") {
                 postfixList.push(Number(num));
                 num = "";
             }
-         } else if(token == ')'){
+         } else if(element == ')'){
             if(num != "") {
                 postfixList.push(Number(num));
                 num = "";
             }
-            let topToken = opStack.pop();
-            while(topToken != "("){
-                postfixList.push(topToken);
-                topToken = opStack.pop();
+            let topelement = opStack.pop();
+            while(topelement != "("){
+                postfixList.push(topelement);
+                topelement = opStack.pop();
             }
             
         } else {
@@ -57,10 +56,10 @@ function expressionCalculator(expr) {
                 postfixList.push(Number(num));
                 num = "";
             }
-            while(opStack.length != 0 && prec[opStack[opStack.length-1]] >= prec[token]) {
+            while(opStack.length != 0 && prec[opStack[opStack.length-1]] >= prec[element]) {
                 postfixList.push(opStack.pop());
             }  
-            opStack.push(token);
+            opStack.push(element);
         }
         
     }); 
@@ -74,12 +73,12 @@ function expressionCalculator(expr) {
  
     let operands = [];
 
-    postfixList.forEach(token => {
-        if(token in prec){
+    postfixList.forEach(element => {
+        if(element in prec){
             let result;
             let operand1 = operands.pop();
             let operand2 = operands.pop();
-            switch(token){
+            switch(element){
                 case "+" :
                   result = operand1 + operand2;
                 break;
@@ -98,7 +97,7 @@ function expressionCalculator(expr) {
             }
             operands.push(result);   
         } else {
-            operands.push(Number(token));
+            operands.push(Number(element));
         }
     });
     return operands.pop();
